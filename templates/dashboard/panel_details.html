@@ -1,0 +1,98 @@
+
+{% extends "base.html" %}
+
+{% block title %}Panel details{% endblock %}
+
+{% block webname %}{{ panel.name }} {{ version.name }}{% endblock %}
+
+{% block content %}
+    {% if no_feature_list %}
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell table__cell_type_header ">Feature</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Total</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Passed</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Fail</div>
+                <div datatype="datetime" class="table__cell table__cell_type_header table__cell_date">Start date</div>
+            </div>
+        </div>
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell_error_row">Please assign features for current panel</div>
+            </div>
+        </div>
+        {% for key, value in no_feature_list.items %}
+{#            {% if result.feature.name|stringformat:"s" != "PANEL SETUP : Identification" %}#}
+                <div class="table">
+                    <a class="table__row" href="/panel/{{ panel.id }}/{{ version.id }}/{{ key.id }}">
+                        <div datatype="string" class="table__cell table__cell_feature">{{ key.name }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ value.total }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ value.passed }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ value.failed }}</div>
+                        <div datatype="datetime" class="table__cell table__cell_date">{{ value.start_date }}</div>
+                    </a>
+                </div>
+{#            {% endif %}#}
+        {% endfor %}
+    {% else %}
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell table__cell_type_header ">Feature</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Total</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Passed</div>
+                <div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Fail</div>
+                <div datatype="datetime" class="table__cell table__cell_type_header table__cell_date">Start date</div>
+            </div>
+        </div>
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell table__cell_type_colored ">Already performed</div>
+            </div>
+        </div>
+        {% for key, value in present.items %}
+{#        {% if result.feature.name|stringformat:"s" != "PANEL SETUP : Identification" %}#}
+            <div class="table">
+                <a class="table__row" href="/panel/{{ panel.id }}/{{ version.id }}/{{ key.id }}">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ key.name }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.total }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.passed }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.failed }}</div>
+                    <div datatype="datetime" class="table__cell table__cell_date">{{ value.start_date }}</div>
+                </a>
+                </div>
+{#        {% endif %}#}
+    {% endfor %}
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell table__cell_type_colored ">Not performed</div>
+            </div>
+        </div>
+        {% for result in absent %}
+            <div class="table">
+                    <a class="table__row" href="">
+                        <div datatype="string" class="table__cell table__cell_feature">{{ result }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ result.total }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ result.passed }}</div>
+                        <div datatype="number" class="table__cell table__cell_stats">{{ result.fail }}</div>
+                        <div datatype="datetime" class="table__cell table__cell_date">{{ result.start_time }}</div>
+                        <div datatype="datetime" class="table__cell table__cell_tested_ver">{{ result.version_name }}</div>
+                    </a>
+                </div>
+        {% endfor %}
+        <div class="table">
+            <div class="table__row">
+                <div datatype="string" class="table__cell table__cell_type_colored ">Not in list</div>
+            </div>
+        </div>
+        {% for key, value in not_in_list.items %}
+            <div class="table">
+                <a class="table__row" href="/panel/{{ panel.id }}/{{ version.id }}/{{ key.id }}">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ key.name }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.total }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.passed }}</div>
+                    <div datatype="number" class="table__cell table__cell_stats">{{ value.failed }}</div>
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

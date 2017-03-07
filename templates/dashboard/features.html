@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Features{% endblock %}
+
+{% block webname %}Features{% endblock %}
+
+{% block content %}
+    <div class="table">
+        <div class="table__row">
+            <div datatype="string" class="table__cell table__cell_type_header ">Feature</div>
+            <!--<div datatype="string" class="table__cell table__cell_type_header ">Panel</div>-->
+            <!--<div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Total</div>-->
+            <!--<div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Passed</div>-->
+            <!--<div datatype="number" class="table__cell table__cell_type_header table__cell_stats">Fail</div>-->
+            <!--<div datatype="datetime" class="table__cell table__cell_type_header table__cell_date">Feature tested</div>-->
+            <!--<div datatype="datetime" class="table__cell table__cell_type_header table__cell_tested_ver">Version</div>-->
+        </div>
+    </div>
+    {% for feature in features %}
+            <div class="table">
+                <a class="table__row" href="/features/{{ feature.id }}">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ feature.name }}</div>
+                    <!--<div datatype="string" class="table__cell table__cell_feature">{{ result.panel.name }}</div>-->
+                    <!--<div datatype="number" class="table__cell table__cell_stats">{{ result.total }}</div>-->
+                    <!--<div datatype="number" class="table__cell table__cell_stats">{{ result.passed }}</div>-->
+                    <!--<div datatype="number" class="table__cell table__cell_stats">{{ result.fail }}</div>-->
+                    <!--<div datatype="datetime" class="table__cell table__cell_date">{{ result.start_time }}</div>-->
+                    <!--<div datatype="datetime" class="table__cell table__cell_tested_ver">{{ result.version_name }}</div>-->
+                </a>
+            </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+{% load staticfiles %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-with-addons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js"></script>
+    <script type="text/babel" src="{% static 'js/index.js' %}"></script>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/ico" />
+    {% block script_src %}{% endblock %}
+</head>
+<body id="altbody">
+<div class="header">
+    <h1 class="header__text">{% block webname %}{% endblock %}</h1>
+</div>
+<div class="content">
+    <div class="menu">
+        <a class="menu__item" href="/">Dashboard</a>
+        <a class="menu__item" href="/features">Features</a>
+        <a class="menu__item" href="/charts">Charts</a>
+        <a class="menu__item" href="/admin">Administration</a>
+        <a class="statistic" href="/progress">
+            {{ queue }} files in processing queue<br/>
+            {{ fail }} files could not be processed</a>
+    </div>
+
+    {% block content %}{% endblock %}
+    <div class="footer">
+        <a href="flush_cache">Click here to flush cache</a>
+        <span>Contacts</span>
+        <a rel="nofollow" href="mailto:AGribenko@tycoint.com">Anton</a>
+        <span>or</span>
+        <a rel="nofollow" href="mailto:OMozharovskyi@tycoint.com">Oleg</a>
+    </div>
+</div>
+    <script type="text/babel" src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>

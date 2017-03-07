@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+
+{% block title %}Parcing details{% endblock %}
+
+{% block webname %}file parcing statistic{% endblock %}
+
+{% block content %}
+<div class="table">
+    <div class="table__row">
+        <div datatype="string" class="table__cell table__cell_type_header">Filepath</div>
+        <div datatype="string" class="table__cell table__cell_type_header table__cell_date">Incert date</div>
+        <div datatype="string" class="table__cell table__cell_type_header table__cell_ip">Remote IP</div>
+    </div>
+</div>
+<div class="table">
+    <div class="table__row">
+        <div datatype="string" class="table__cell table__cell_type_colored ">Files in progress</div>
+    </div>
+    {% for result in queue_files %}
+        <div class="table">
+                <a class="table__row">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ result.filename }}</div>
+                    <div datatype="string" class="table__cell table__cell_date">{{ result.date }}</div>
+                    <div datatype="string" class="table__cell table__cell_ip">{{ result.ip }}</div>
+                </a>
+            </div>
+    {% endfor %}
+</div>
+<div class="table">
+    <div class="table__row">
+        <div datatype="string" class="table__cell table__cell_type_colored ">Failed to parsing files</div>
+    </div>
+        {% for result in fail_files %}
+        <div class="table">
+                <a class="table__row">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ result.filename }}</div>
+                    <div datatype="string" class="table__cell table__cell_date">{{ result.date }}</div>
+                    <div datatype="string" class="table__cell table__cell_ip">{{ result.ip }}</div>
+                </a>
+            </div>
+    {% endfor %}
+</div>
+<div class="table">
+    <div class="table__row">
+        <div datatype="string" class="table__cell table__cell_type_colored ">Successfully parsed files</div>
+    </div>
+        {% for result in processed_files %}
+        <div class="table">
+                <a class="table__row">
+                    <div datatype="string" class="table__cell table__cell_feature">{{ result.filename }}</div>
+                    <div datatype="string" class="table__cell table__cell_date">{{ result.date }}</div>
+                    <div datatype="string" class="table__cell table__cell_ip">{{ result.ip }}</div>
+                </a>
+            </div>
+    {% endfor %}
+</div>
+{% endblock %}

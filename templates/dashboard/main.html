@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block webname %}Automated tests results{% endblock %}
+
+{% block content %}
+
+    <script type="text/javascript">
+        {% autoescape off %}
+                window.results = {{ results }};
+        {% endautoescape %}
+    </script>
+
+    <div id="mountNode"></div>
+
+{% endblock %}
+
+
