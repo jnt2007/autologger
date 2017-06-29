@@ -1,13 +1,14 @@
 import json
 
-from cacheops import cached_as
 from django.db import connection
 from datetime import datetime
-import time
+
+from django.db.models import Q
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from dashboard.models import AutomationResult, Panel, Version, FeatureMatching, Feature
 from django.core import serializers
 from django.core.cache import cache
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def obj_to_dict(model_instance):
@@ -197,14 +198,34 @@ def check_cache(results):
 def index(request):
     queue, fail = get_parsing_statistic()
 
-    automation_results = AutomationResult.objects.order_by('version__name').all()
+    versions = Version.objects.order_by('-name').all()
+    paginator = Paginator(versions, 3)  # Show 25 contacts per page
 
-    # @cached_as(automation_results)
-    # def results():
-    #     return json.dumps(map(serialize_result, automation_results))
+    page = request.GET.get('page')
+    try:
+        versions_on_page = paginator.page(page)
+        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
+                                                                                       Q(version=versions_on_page[1]) |
+                                                                                       Q(version=versions_on_page[2]))
+
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        versions_on_page = paginator.page(1)
+        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
+                                                                                       Q(version=versions_on_page[1]) |
+                                                                                       Q(version=versions_on_page[2]))
+
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        versions_on_page = paginator.page(paginator.num_pages)
+        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
+                                                                                       Q(version=versions_on_page[1]) |
+                                                                                       Q(version=versions_on_page[2]))
 
     context = {
         'results': check_cache(automation_results),
+        'num_pages': list(range(1, paginator.num_pages + 1)),
+        'current_page': int(page or 1),
         'queue': queue,
         'fail': fail
     }

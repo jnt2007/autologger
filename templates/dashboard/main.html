@@ -8,12 +8,16 @@
 
     <script type="text/javascript">
         {% autoescape off %}
-                window.results = {{ results }};
+            window.results = {{ results }};
         {% endautoescape %}
     </script>
 
     <div id="mountNode"></div>
-
+    <div class="pages">
+        {% for page in num_pages %}
+            <a class="page__item{% if current_page == page %} page__item_active_page{% endif %}" href="index?page={{ page }}">{{ page }}</a>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 

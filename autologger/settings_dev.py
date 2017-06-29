@@ -62,7 +62,7 @@ DATABASES = {
         'NAME': 'auto_loger',
         'USER': 'auto_loger',
         'PASSWORD': 'production_auto_loger',
-        'HOST': '10.51.110.30',
+        'HOST': '10.51.112.30',
         #    'PORT': '3306'
     }
 }
