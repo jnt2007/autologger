@@ -198,29 +198,27 @@ def check_cache(results):
 def index(request):
     queue, fail = get_parsing_statistic()
 
-    versions = Version.objects.order_by('-name').all()
-    paginator = Paginator(versions, 3)  # Show 25 contacts per page
+    # versions = Version.objects.order_by('automationresult__start_time').all()
+    versions = set(AutomationResult.objects.order_by('-start_time').values_list('version'))
+    version_list = []
+    for (id,) in versions:
+        version_list.append(id)
+    paginator = Paginator(sorted(version_list, reverse=True), 3)
 
     page = request.GET.get('page')
     try:
         versions_on_page = paginator.page(page)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
-                                                                                       Q(version=versions_on_page[1]) |
-                                                                                       Q(version=versions_on_page[2]))
+        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
         versions_on_page = paginator.page(1)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
-                                                                                       Q(version=versions_on_page[1]) |
-                                                                                       Q(version=versions_on_page[2]))
+        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         versions_on_page = paginator.page(paginator.num_pages)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(Q(version=versions_on_page[0]) |
-                                                                                       Q(version=versions_on_page[1]) |
-                                                                                       Q(version=versions_on_page[2]))
+        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
     context = {
         'results': check_cache(automation_results),
