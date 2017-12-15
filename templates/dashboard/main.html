@@ -17,6 +17,7 @@
         {% for page in num_pages %}
             <a class="page__item{% if current_page == page %} page__item_active_page{% endif %}" href="index?page={{ page }}">{{ page }}</a>
         {% endfor %}
+        <a class="page__item" href="index?page=all">all</a>
     </div>
 {% endblock %}
 

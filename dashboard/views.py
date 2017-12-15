@@ -203,27 +203,30 @@ def index(request):
     version_list = []
     for (id,) in versions:
         version_list.append(id)
-    paginator = Paginator(sorted(version_list, reverse=True), 3)
+    paginator = Paginator(sorted(version_list, reverse=True), 6)
 
     page = request.GET.get('page')
-    try:
-        versions_on_page = paginator.page(page)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
+    if page == 'all':
+        automation_results = AutomationResult.objects.order_by('version__name')
+    else:
+        try:
+            versions_on_page = paginator.page(page)
+            automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        versions_on_page = paginator.page(1)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            versions_on_page = paginator.page(1)
+            automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        versions_on_page = paginator.page(paginator.num_pages)
-        automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            versions_on_page = paginator.page(paginator.num_pages)
+            automation_results = AutomationResult.objects.order_by('version__name').filter(version__in=versions_on_page)
 
     context = {
         'results': check_cache(automation_results),
         'num_pages': list(range(1, paginator.num_pages + 1)),
-        'current_page': int(page or 1),
+        'current_page': page or 1,
         'queue': queue,
         'fail': fail
     }
